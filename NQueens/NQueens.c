@@ -22,7 +22,7 @@ void display(int board[], int n) {
 }
 
 int place(int board[], int row, int col) {
-	for (int i=0; i<=row-1; i++) {
+	for (int i=1; i<=row-1; i++) {
 		if ((board[i] == col) || (abs(board[i]-col) == (abs(i-row))))
 			return 0;
 	}
@@ -43,7 +43,7 @@ void NQueens(int board[], int row, int n) {
 
 int main() {
 	int n, board[SIZE];
-	printf("\n---N QUEENS PROBLEM---\n");
+	printf("\nN QUEENS PROBLEM -->\n");
 	printf("\nNO. OF QUEENS: ");
 	scanf("%d",&n);
 	while (n < 4) {
