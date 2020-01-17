@@ -1,17 +1,25 @@
 // Name        : 2 SL-V Assembler
 // Author      : Amod Dhopavkar
 
+/*
+lt - 1
+le - 2
+eq - 3
+gt - 4
+ge - 5
+any - 6
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
 
 typedef struct symTable
 {
 	char symbol[10];
 	char length[5];
 	int address;
-}symTable;	
+}symTable;
 
 typedef struct literalTable
 {
@@ -41,10 +49,10 @@ int main()
 	symTable symtab[10];
 	literalTable littab[10];
 	MOT mot[21];
-	
+
 	int lc=0, ptp=0, ltp=0, stp=0, rc=0, temp, temp2, temp3;
 	pooltab[0]=1;
-	
+
 	char line[50], ch;
 	char areg[5], breg[5], creg[5], dreg[5];
 	FILE *fp1, *fp2;
@@ -52,7 +60,7 @@ int main()
 	char *b = buffer;
 	size_t bufsize = 30;
 	size_t characters;
-	
+
 	initMot(mot);
 
 	char delimeter[] = " ";
@@ -72,23 +80,23 @@ int main()
 			printf("\nERROR!\nOutput file cannot be opened...");
 		else
 		{
-			printf("\n\nInput file being interpreted...\n");	
+			printf("\n\nInput file being interpreted...\n");
 			while(!feof(fp1))
 			{
 				characters = getline(&b,&bufsize,fp1);
 				//b = replace_multi_space_with_single_space(b);
 				//printf("%s \n",buffer);
-				
-				token = strtok(buffer, delimeter);	//get the first token
+
+				token = strtok(buffer, delimeter);				//get the first token
 				i = checkMot(token, mot);
-				if(i != -1) 						//first token is mnemonic
+				if(i != -1) 															//first token is mnemonic
 				{
 					fprintf(fp2, "%d ", lc);
 					fprintf(fp2, "%s ", mot[i].class);
 					fprintf(fp2, "%d ", mot[i].code);
-					if(strcmp(mot[i].class, "AD") == 0)
+					if(strcmp(mot[i].class, "AD") == 0)			//first token is Assembler Directive
 					{
-						if(strcmp(mot[i].mneCode, "START") == 0) 
+						if(strcmp(mot[i].mneCode, "START") == 0)
 						{
 							token = strtok(NULL, delimeter);
 							lc = atoi(token);
@@ -97,9 +105,9 @@ int main()
 						else if(strcmp(mot[i].mneCode, "ORIGIN") == 0)
 						{
 							token = strtok(NULL, delimeter);
-							if((int)token[0] < 58) 		// if op1 is only a number i.e 200
+							if((int)token[0] < 58) 							// if op1 is only a number i.e 200
 								lc = atoi(token);
-							else 						// if op1 is alphanumeric i.e A+1
+							else 																// if op1 is alphanumeric i.e A+1
 							{
 								temp = checkSymTab(token, &stp, symtab, lc);
 								lc = symtab[temp].address;
@@ -124,9 +132,9 @@ int main()
 									{
 										temp3 -= (int)token[temp+1];
 									}
-								}	
+								}
 								lc = temp3;*/
-							}		
+							}
 						}
 						else if(strcmp(mot[i].mneCode, "END") == 0)
 						{
@@ -149,7 +157,7 @@ int main()
 							}
 							printf("\n\n");
 							return 0;
-						} 
+						}
 						else if(strcmp(mot[i].mneCode, "LTORG") == 0)
 						{
 							for(temp = pooltab[ptp]-1; temp < ltp; temp++)
@@ -161,9 +169,9 @@ int main()
 							pooltab[ptp] = ltp+1;
 						}
 					}
-					
 
-					else if(strcmp(mot[i].class, "IS") == 0)
+
+					else if(strcmp(mot[i].class, "IS") == 0)			//first token is Iterative Statement
 					{
 						token = strtok(NULL, delimeter);
 						if(strcmp(token, "AREG") == 0)
@@ -171,14 +179,14 @@ int main()
 						else if(strcmp(token, "BREG") == 0)
 							fprintf(fp2, "%s", breg);
 						else if(strcmp(token, "CREG") == 0)
-							fprintf(fp2, "%s", creg);	
+							fprintf(fp2, "%s", creg);
 						else if(strcmp(token, "DREG") == 0)
 							fprintf(fp2, "%s", dreg);
 						else
 						{
 							temp = checkSymTab(token, &stp, symtab, lc);
 							fprintf(fp2, "S %d", temp+1);
-						}	
+						}
 						token = strtok(NULL, delimeter);
 						if(token[0] == '=')
 						{
@@ -201,7 +209,7 @@ int main()
 						strcpy(symtab[stp].symbol, token);
 						symtab[stp].address = lc;
 						stp++;
-					}	
+					}
 					strcpy(temp_label, token);
 					token = strtok(NULL, delimeter);
 					i = checkMot(token, mot);
@@ -214,7 +222,7 @@ int main()
 					fprintf(fp2, "%d ", mot[i].code);
 					if(strcmp(mot[i].class, "AD") == 0)
 					{
-						if(strcmp(mot[i].mneCode, "START") == 0) 
+						if(strcmp(mot[i].mneCode, "START") == 0)
 						{
 							token = strtok(NULL, delimeter);
 							lc = atoi(token);
@@ -251,10 +259,10 @@ int main()
 									{
 										temp3 -= (int)token[temp+1];
 									}
-								}	
+								}
 								lc = temp3;*/
-							}	
-							fprintf(fp2, "\n");	
+							}
+							fprintf(fp2, "\n");
 						}
 						else if(strcmp(mot[i].mneCode, "END") == 0)
 						{
@@ -267,7 +275,7 @@ int main()
 							pooltab[ptp] = ltp+1;
 							fprintf(fp2, "\n");
 							return 0;
-						} 
+						}
 						else if(strcmp(mot[i].mneCode, "LTORG") == 0)
 						{
 							for(temp = pooltab[ptp]-1; temp < ltp; temp++)
@@ -311,11 +319,11 @@ int main()
 									{
 										temp3 -= (int)token[temp+1];
 									}
-								}	
+								}
 								temp2 = checkSymTab(token, &stp, symtab, lc);
 								symtab[temp2].address = temp3;*/
 							}
-							fprintf(fp2, "\n");		
+							fprintf(fp2, "\n");
 						}
 					}
 					else if(strcmp(mot[i].class, "IS") == 0)
@@ -328,7 +336,7 @@ int main()
 							else if(strcmp(token, "BREG") == 0)
 								fprintf(fp2, "%s", breg);
 							else if(strcmp(token, "CREG") == 0)
-								fprintf(fp2, "%s", creg);	
+								fprintf(fp2, "%s", creg);
 							else if(strcmp(token, "DREG") == 0)
 								fprintf(fp2, "%s", dreg);
 							else
@@ -336,7 +344,7 @@ int main()
 								temp = checkSymTab(token, &stp, symtab, lc);
 								fprintf(fp2, "S %d", temp+1);
 							}
-						}	
+						}
 						token = strtok(NULL, delimeter);
 						if(token != NULL)
 						{
@@ -349,14 +357,14 @@ int main()
 							{
 								temp = checkSymTab(token, &stp, symtab, lc);
 								fprintf(fp2, "S %d", temp+1);
-							}	
+							}
 						}
 						lc++;
 						fprintf(fp2, "\n");
 					}
 					else if(strcmp(mot[i].class, "DL") == 0)
 					{
-						if(strcmp(mot[i].mneCode, "DS") == 0) 
+						if(strcmp(mot[i].mneCode, "DS") == 0)
 						{
 							token = strtok(NULL, delimeter);
 							temp2 = checkSymTab(temp_label, &stp, symtab, lc);
@@ -365,7 +373,7 @@ int main()
 							lc += temp;
 							fprintf(fp2, "C %d\n", temp);
 						}
-						else if(strcmp(mot[i].mneCode, "DC") == 0) 
+						else if(strcmp(mot[i].mneCode, "DC") == 0)
 						{
 							token = strtok(NULL, delimeter);
 							temp2 = checkSymTab(temp_label, &stp, symtab, lc);
@@ -373,8 +381,8 @@ int main()
 							lc++;
 							fprintf(fp2, "C %s\n", token);
 						}
-					}	
-				}	
+					}
+				}
 			}
 		}
 		fclose(fp2);
@@ -385,7 +393,7 @@ int main()
 /*
 char* replace_multi_space_with_single_space(char *str)
 {
-    char *dest = str;  
+    char *dest = str;
     while (*str != '\0')
     {
         while (*str == ' ' && *(str + 1) == ' ')
@@ -406,71 +414,71 @@ void initMot(MOT mot[21])
 		strcpy(mot[i].class,"IS");
 		mot[i].chain=-1;
 	}
-	
+
 	strcpy(mot[0].mneCode,"ADD");
 	mot[0].code=1;
-	
+
 	strcpy(mot[1].mneCode,"BC");
 	mot[1].code=7;
-	
+
 	strcpy(mot[2].mneCode,"COMP");
 	mot[2].code=6;
-	
+
 	strcpy(mot[3].mneCode,"DIV");
 	mot[3].code=8;
 	mot[3].chain=5;
-	
+
 	strcpy(mot[4].mneCode,"END");
 	mot[4].code=2;
 	strcpy(mot[4].class,"AD");
 	mot[4].chain=7;
-	
+
 	strcpy(mot[5].mneCode,"DC");
 	mot[5].code=1;
 	strcpy(mot[5].class,"DL");
 	mot[5].chain=6;
-	
+
 	strcpy(mot[6].mneCode,"DS");
 	mot[6].code=2;
 	strcpy(mot[6].class,"DL");
-	
+
 	strcpy(mot[7].mneCode,"EQU");
-	mot[7].code=5;
+	mot[7].code=4;
 	strcpy(mot[7].class,"AD");
-	
+
 	strcpy(mot[11].mneCode,"LTORG");
-	mot[11].code=3;
+	mot[11].code=5;
 	strcpy(mot[11].class,"AD");
-	
+
 	strcpy(mot[12].mneCode,"MULT");
 	mot[12].code=3;
 	mot[12].chain=13;
-	
+
 	strcpy(mot[13].mneCode,"MOVER");
 	mot[13].code=4;
 	mot[13].chain=16;
-	
+
 	strcpy(mot[14].mneCode,"ORIGIN");
-	mot[14].code=4;
+	mot[14].code=3;
 	strcpy(mot[14].class,"AD");
-	
+
 	strcpy(mot[15].mneCode,"PRINT");
 	mot[15].code=10;
-	
+
 	strcpy(mot[16].mneCode,"MOVEM");
 	mot[16].code=5;
-	
+
 	strcpy(mot[17].mneCode,"READ");
 	mot[17].code=9;
-	
+
 	strcpy(mot[18].mneCode,"STOP");
 	mot[18].code=0;
 	mot[18].chain=19;
-	
+
 	strcpy(mot[19].mneCode,"SUB");
 	mot[19].code=2;
 	mot[19].chain=20;
-	
+
 	strcpy(mot[20].mneCode,"START");
 	mot[20].code=1;
 	strcpy(mot[20].class,"AD");
