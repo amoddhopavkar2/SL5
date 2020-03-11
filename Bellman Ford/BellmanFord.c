@@ -11,22 +11,22 @@ int main() {
 	Edge edge[20];
 	
 	printf("\n---BELLMAN FORD---\n");
-	printf("\nNo of nodes: ");
+	printf("\nNo of vertices: ");
 	scanf("%d",&n);
 	printf("\nNo of edges: ");
 	scanf("%d",&e);
 
 	for (int i=0; i<e; i++) {
-		printf("\nENTER EDGE AND ITS COST ->");
-		printf("\nVertex 1: ");
+		printf("\nENTER EDGE AND ITS COST -->");
+		printf("\nStart Vertex: ");
 		scanf("%d",&edge[i].u);
-		printf("\nVertex 2: ");
+		printf("\nEnd Vertex: ");
 		scanf("%d",&edge[i].v);
 		printf("\nCost: ");
 		scanf("%d",&edge[i].cost);
 	}
 
-	printf("\n\nEDGES ARE ->\n");
+	printf("\n\nENTER THE EDGES -->\n");
 	for (int i=0; i<e; i++) {
 		printf("%d - %d :: %d",edge[i].u,edge[i].v,edge[i].cost);
 		printf("\n");
@@ -37,7 +37,7 @@ int main() {
 		distance[i] = 9999;
 	}
 
-	printf("\nENTER START VERTEX: ");
+	printf("\nENTER STARTING VERTEX: ");
 	scanf("%d",&start);
 	distance[start] = 0;
 	parent[start] = start;
