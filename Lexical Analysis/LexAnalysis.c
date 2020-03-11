@@ -32,6 +32,95 @@ int main() {
 	fclose();
 }
 
+void fillUST(string &a) {
+	FILE *op;
+	string b, c, d;
+	int lexIndex = 0;
+	op = fopen("UST.txt","w");
+	
+	for (int i=0; i<a.size();i++) {
+		if (isalpha(a[i]) > 0) {
+			b += a[i];
+		}
+
+		else if (a[i] >= 48 && a[i] <= 57) {
+			if (b.size() != 0) {
+				fprintf(op,"%d\t\t%s\t\t""\n",lexIndex,b);
+				lexIndex++;
+				b.clear();
+			}
+		}
+
+		else {
+			d += a[i];
+			if (a[i] == '' || a[i] == '\t') {
+				//d.clear();
+			}
+
+			if (a[i] == '<' && (a[i+1] == '<' || a[i+1] == '=')) {
+				d = a[i+1];
+				lexIndex = retIndexTrm(d);
+				fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,d);
+				//d.clear();
+				i++;
+			}
+
+			else if (a[i] == '>' && (a[i+1] == '>' || a[i+1] == '=')) {
+				d = a[i+1];
+				lexIndex = retIndexTrm(d);
+				fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,d);
+				//d.clear();
+				i++;
+			}
+
+			else if (a[i] == '+' && (a[i+1] == '+' || a[i+1] == '=')) {
+				d = a[i];
+				lexIndex = retIndexTrm(d);
+				fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,d);
+				//d.clear();
+				i++;
+			}
+
+			else if(a[i] == '-' && (a[i+1] == '-' || a[i+1] == '=')) {
+				d = a[i];
+				lexIndex = retIndexTrm(d);
+				fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,d);
+				//d.clear();
+				i++;
+			}
+
+			if (b.size() != 0) {
+				if (isKeyword(b)) {
+					lexIndex = retIndexTrm(b);
+					fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,b);
+				}
+				else {
+					putIdentifier(b);
+					lexIndex = retIndexIdn(b);
+					fprintf("%d\t\t%s\t\tSYMBOL\n",lexIndex,b);
+				}
+			}
+
+			if(a[i] == ',' || a[i] == ';') {
+				//d = a[i];
+				lexIndex = retIndexTrm(d);
+				fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,d);
+			}
+
+			if (a[i] = '(' && a[i+1] = '"') {
+				lexIndex = retIndexTrm(d);
+				size_t found = a.find('"',i+2);
+				fprintf("%d\t\t%s\t\tTERMINAL\n",lexIndex,d);
+
+				if (found != string::npos) {
+					
+				}
+
+			}
+		}
+	}
+}
+
 void initTT(TT terminalTable[SIZE]) {
 	terminalTable[0].index = 1;
 	strcpy(terminalTable[0].terminal,"#");
