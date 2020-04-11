@@ -1,0 +1,8 @@
+void main()
+{
+	int a1=b+c;
+	a++;
+	char ambrose='d';
+	printf("Hello Deano");
+	scanf("Value is %d",&a1);
+}
